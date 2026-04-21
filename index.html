@@ -888,63 +888,109 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
 
       <!-- Proper India SVG with real-ish state shapes + pincode dots -->
       <div style="position:relative;width:100%;background:#f8fafc;border-radius:8px;border:1px solid var(--border);overflow:hidden">
-        <svg id="india-svg" viewBox="0 0 500 580" style="width:100%;display:block;border-radius:6px">
-          <rect width="500" height="580" fill="#e8f0fe" rx="6"/>
-          <style>#india-svg path{stroke:white;stroke-width:1;stroke-linejoin:round}#india-svg path[data-rto=high]{fill:#fca5a5}#india-svg path[data-rto=med]{fill:#fdba74}#india-svg path[data-rto=low]{fill:#86efac}</style>
-          <!-- State outlines using realistic simplified paths -->
-          <!-- Jammu & Kashmir -->
-          <path data-state="Jammu & Kashmir" data-rto="low" data-blocked="23" data-risk="14" d="M155,20 L210,14 L248,22 L258,42 L250,65 L232,78 L210,82 L188,72 L165,60 L152,42 Z"/>
-          <!-- Himachal Pradesh -->
-          <path data-state="Himachal Pradesh" data-rto="low" data-blocked="18" data-risk="15" d="M210,82 L252,68 L268,88 L262,112 L240,120 L218,112 Z"/>
-          <!-- Punjab -->
-          <path data-state="Punjab" data-rto="med" data-blocked="45" data-risk="24" d="M152,88 L210,82 L218,112 L200,132 L168,126 L148,108 Z"/>
-          <!-- Haryana -->
-          <path data-state="Haryana" data-rto="med" data-blocked="38" data-risk="26" d="M200,132 L240,120 L248,148 L222,162 L198,152 Z"/>
-          <!-- Delhi -->
-          <path data-state="Delhi" data-rto="low" data-blocked="12" data-risk="13" d="M222,148 L238,144 L242,158 L226,162 Z"/>
-          <!-- Uttarakhand -->
-          <path data-state="Uttarakhand" data-rto="med" data-blocked="22" data-risk="21" d="M248,112 L292,106 L308,126 L284,142 L252,136 Z"/>
-          <!-- Uttar Pradesh -->
-          <path data-state="Uttar Pradesh" data-rto="high" data-blocked="284" data-risk="38" d="M240,148 L310,128 L348,142 L362,180 L340,220 L295,230 L255,228 L225,205 L222,162 Z"/>
-          <!-- Rajasthan -->
-          <path data-state="Rajasthan" data-rto="high" data-blocked="92" data-risk="34" d="M110,142 L198,132 L222,162 L225,205 L210,242 L168,268 L108,255 L88,205 Z"/>
-          <!-- Bihar -->
-          <path data-state="Bihar" data-rto="high" data-blocked="142" data-risk="41" d="M314,172 L368,162 L378,198 L358,224 L318,222 Z"/>
-          <!-- Sikkim -->
-          <path data-state="Sikkim" data-rto="med" data-blocked="8" data-risk="22" d="M375,152 L390,148 L395,162 L380,166 Z"/>
-          <!-- West Bengal -->
-          <path data-state="West Bengal" data-rto="med" data-blocked="54" data-risk="27" d="M365,168 L408,160 L418,202 L406,255 L380,268 L360,242 L362,205 Z"/>
-          <!-- Jharkhand -->
-          <path data-state="Jharkhand" data-rto="high" data-blocked="78" data-risk="39" d="M318,224 L362,218 L378,255 L348,278 L315,265 Z"/>
-          <!-- Odisha -->
-          <path data-state="Odisha" data-rto="high" data-blocked="67" data-risk="36" d="M345,268 L385,258 L402,292 L388,335 L352,340 L330,305 Z"/>
-          <!-- Madhya Pradesh -->
-          <path data-state="Madhya Pradesh" data-rto="high" data-blocked="108" data-risk="33" d="M172,238 L255,228 L312,242 L315,288 L268,312 L198,302 L158,272 Z"/>
-          <!-- Chhattisgarh -->
-          <path data-state="Chhattisgarh" data-rto="med" data-blocked="44" data-risk="29" d="M286,288 L338,278 L348,322 L322,360 L284,355 L264,318 Z"/>
-          <!-- Gujarat -->
-          <path data-state="Gujarat" data-rto="low" data-blocked="28" data-risk="17" d="M80,238 L148,242 L165,270 L155,315 L115,332 L76,318 L62,278 Z"/>
-          <!-- Maharashtra -->
-          <path data-state="Maharashtra" data-rto="low" data-blocked="19" data-risk="16" d="M148,298 L210,292 L265,312 L258,362 L218,394 L162,390 L126,355 L128,318 Z"/>
-          <!-- Telangana -->
-          <path data-state="Telangana" data-rto="low" data-blocked="14" data-risk="14" d="M238,362 L284,352 L300,388 L272,418 L238,414 L222,390 Z"/>
-          <!-- Andhra Pradesh -->
-          <path data-state="Andhra Pradesh" data-rto="low" data-blocked="16" data-risk="15" d="M222,414 L278,418 L308,448 L288,485 L238,482 L212,460 Z"/>
-          <!-- Karnataka -->
-          <path data-state="Karnataka" data-rto="low" data-blocked="11" data-risk="12" d="M166,390 L224,390 L244,415 L228,458 L192,472 L162,458 L144,422 Z"/>
-          <!-- Tamil Nadu -->
-          <path data-state="Tamil Nadu" data-rto="low" data-blocked="13" data-risk="13" d="M188,472 L234,462 L248,494 L225,530 L192,532 L172,508 Z"/>
-          <!-- Kerala -->
-          <path data-state="Kerala" data-rto="low" data-blocked="9" data-risk="11" d="M165,460 L190,474 L175,510 L154,524 L146,492 L154,468 Z"/>
-          <!-- Goa -->
-          <path data-state="Goa" data-rto="low" data-blocked="4" data-risk="10" d="M142,394 L160,390 L162,404 L146,410 Z"/>
-          <!-- Assam -->
-          <path data-state="Assam" data-rto="high" data-blocked="62" data-risk="40" d="M402,158 L448,152 L458,178 L432,198 L402,190 Z"/>
-          <!-- Meghalaya -->
-          <path data-state="Meghalaya" data-rto="high" data-blocked="28" data-risk="37" d="M408,198 L448,192 L450,210 L418,215 Z"/>
-          <!-- Nagaland/Manipur/Mizoram/Tripura/Arunachal -->
-          <path data-state="North East States" data-rto="high" data-blocked="52" data-risk="38" d="M438,148 L482,144 L492,178 L468,198 L452,192 L450,162 Z"/>
-        </svg>
+        <svg id="india-svg" viewBox="0 0 550 620" style="width:100%;display:block;border-radius:6px">
+  <style>
+    #india-svg .state { stroke:#fff; stroke-width:1; stroke-linejoin:round; }
+    #india-svg .state[data-rto="high"] { fill:#fca5a5; }
+    #india-svg .state[data-rto="med"]  { fill:#fdba74; }
+    #india-svg .state[data-rto="low"]  { fill:#86efac; }
+  </style>
+  <!-- Ocean background -->
+  <rect width="550" height="620" fill="#dbeafe" rx="8"/>
+  <!-- Outer India silhouette — unified border for visual clarity -->
+  <path d="M185,18 L225,12 L268,18 L290,30 L305,52 L298,75 L278,90 L310,95
+           L330,112 L340,132 L388,125 L420,135 L445,148 L462,165 L472,188
+           L465,210 L448,218 L465,228 L478,255 L468,285 L448,298 L435,322
+           L415,335 L420,355 L408,378 L390,395 L375,420 L358,448 L342,472
+           L322,498 L305,522 L288,548 L272,568 L258,580 L244,568 L228,545
+           L212,518 L198,492 L182,465 L165,448 L148,435 L132,418 L118,398
+           L105,375 L98,350 L92,322 L88,295 L78,268 L68,242 L62,215
+           L70,188 L82,165 L75,142 L88,118 L105,102 L98,80 L108,58
+           L128,42 L155,28 Z"
+        fill="#c8e6c9" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" opacity="0.3"/>
+
+  <!-- J&K / Ladakh -->
+  <path class="state" data-state="Jammu &amp; Kashmir" data-rto="low" data-blocked="23" data-risk="14"
+        d="M168,28 L215,18 L260,25 L278,42 L272,65 L255,80 L230,88 L205,82 L182,70 L168,52 Z"/>
+  <!-- Himachal Pradesh -->
+  <path class="state" data-state="Himachal Pradesh" data-rto="low" data-blocked="18" data-risk="15"
+        d="M218,82 L258,75 L275,92 L268,118 L245,125 L222,115 Z"/>
+  <!-- Punjab -->
+  <path class="state" data-state="Punjab" data-rto="med" data-blocked="45" data-risk="24"
+        d="M162,92 L215,85 L222,115 L205,132 L172,128 L152,110 Z"/>
+  <!-- Haryana -->
+  <path class="state" data-state="Haryana" data-rto="med" data-blocked="38" data-risk="26"
+        d="M205,132 L245,122 L252,150 L228,164 L205,154 Z"/>
+  <!-- Delhi (tiny) -->
+  <path class="state" data-state="Delhi" data-rto="low" data-blocked="12" data-risk="13"
+        d="M228,148 L242,144 L246,158 L232,162 Z"/>
+  <!-- Uttarakhand -->
+  <path class="state" data-state="Uttarakhand" data-rto="med" data-blocked="22" data-risk="21"
+        d="M255,112 L298,105 L315,128 L290,145 L260,138 Z"/>
+  <!-- Uttar Pradesh -->
+  <path class="state" data-state="Uttar Pradesh" data-rto="high" data-blocked="284" data-risk="38"
+        d="M245,150 L318,130 L355,145 L368,182 L345,225 L300,232 L258,228 L228,205 L228,164 Z"/>
+  <!-- Rajasthan -->
+  <path class="state" data-state="Rajasthan" data-rto="high" data-blocked="92" data-risk="34"
+        d="M118,142 L202,132 L228,164 L228,205 L212,245 L170,272 L112,258 L90,208 Z"/>
+  <!-- Bihar -->
+  <path class="state" data-state="Bihar" data-rto="high" data-blocked="142" data-risk="41"
+        d="M320,175 L372,165 L382,202 L362,228 L322,225 Z"/>
+  <!-- Sikkim -->
+  <path class="state" data-state="Sikkim" data-rto="med" data-blocked="8" data-risk="22"
+        d="M378,155 L392,150 L396,164 L382,168 Z"/>
+  <!-- West Bengal -->
+  <path class="state" data-state="West Bengal" data-rto="med" data-blocked="54" data-risk="27"
+        d="M368,172 L412,162 L422,205 L408,260 L385,272 L362,245 L365,208 Z"/>
+  <!-- Jharkhand -->
+  <path class="state" data-state="Jharkhand" data-rto="high" data-blocked="78" data-risk="39"
+        d="M322,228 L368,222 L382,258 L352,282 L318,268 Z"/>
+  <!-- Odisha -->
+  <path class="state" data-state="Odisha" data-rto="high" data-blocked="67" data-risk="36"
+        d="M348,272 L390,262 L406,298 L390,338 L355,342 L332,308 Z"/>
+  <!-- Madhya Pradesh -->
+  <path class="state" data-state="Madhya Pradesh" data-rto="high" data-blocked="108" data-risk="33"
+        d="M178,242 L258,228 L318,242 L318,290 L272,315 L202,305 L162,275 Z"/>
+  <!-- Chhattisgarh -->
+  <path class="state" data-state="Chhattisgarh" data-rto="med" data-blocked="44" data-risk="29"
+        d="M288,290 L340,282 L350,325 L325,362 L288,358 L268,322 Z"/>
+  <!-- Gujarat -->
+  <path class="state" data-state="Gujarat" data-rto="low" data-blocked="28" data-risk="17"
+        d="M82,240 L150,245 L168,275 L158,318 L118,335 L78,320 L65,282 Z"/>
+  <!-- Maharashtra -->
+  <path class="state" data-state="Maharashtra" data-rto="low" data-blocked="19" data-risk="16"
+        d="M150,302 L215,295 L268,315 L262,365 L222,398 L165,392 L128,358 L130,322 Z"/>
+  <!-- Telangana -->
+  <path class="state" data-state="Telangana" data-rto="low" data-blocked="14" data-risk="14"
+        d="M242,365 L288,355 L305,390 L278,422 L242,418 L225,395 Z"/>
+  <!-- Andhra Pradesh -->
+  <path class="state" data-state="Andhra Pradesh" data-rto="low" data-blocked="16" data-risk="15"
+        d="M225,418 L282,422 L312,452 L292,488 L242,485 L215,462 Z"/>
+  <!-- Karnataka -->
+  <path class="state" data-state="Karnataka" data-rto="low" data-blocked="11" data-risk="12"
+        d="M168,392 L228,392 L248,418 L232,460 L195,475 L165,460 L146,424 Z"/>
+  <!-- Tamil Nadu -->
+  <path class="state" data-state="Tamil Nadu" data-rto="low" data-blocked="13" data-risk="13"
+        d="M192,475 L238,465 L252,498 L228,535 L195,538 L175,512 Z"/>
+  <!-- Kerala -->
+  <path class="state" data-state="Kerala" data-rto="low" data-blocked="9" data-risk="11"
+        d="M168,462 L195,476 L178,514 L156,528 L148,495 L156,470 Z"/>
+  <!-- Goa -->
+  <path class="state" data-state="Goa" data-rto="low" data-blocked="4" data-risk="10"
+        d="M145,396 L162,392 L165,406 L148,412 Z"/>
+  <!-- Assam -->
+  <path class="state" data-state="Assam" data-rto="high" data-blocked="62" data-risk="40"
+        d="M408,162 L452,155 L462,180 L436,200 L408,192 Z"/>
+  <!-- Meghalaya -->
+  <path class="state" data-state="Meghalaya" data-rto="high" data-blocked="28" data-risk="37"
+        d="M412,200 L452,195 L454,215 L422,220 Z"/>
+  <!-- NE States -->
+  <path class="state" data-state="North East States" data-rto="high" data-blocked="52" data-risk="38"
+        d="M442,148 L488,143 L496,180 L470,200 L455,193 L452,165 Z"/>
+  <!-- Andaman (small island) -->
+  <path class="state" data-state="Andaman &amp; Nicobar" data-rto="low" data-blocked="2" data-risk="8"
+        d="M488,350 L495,348 L497,362 L490,365 Z"/>
+</svg>
 
         <!-- Pincode dots overlay — positioned over the SVG -->
         <div id="pincode-dots" style="position:absolute;inset:0;pointer-events:none"></div>
@@ -1649,15 +1695,14 @@ const SUBCATS = {
 };
 
 const AUD = {
-  "Women's Fashion":{total:8.4,female:88,age:[[18,24,28],[25,34,42],[35,44,22],[45,99,8]],cities:[["Mumbai",18],["Delhi",15],["Bengaluru",12],["Pune",9],["Hyderabad",8]],segs:[[1.4,"Power Buyers (5+ orders)","#2563eb"],[3.0,"Repeat Buyers (2–4 orders)","#16a34a"],[4.0,"One-time Buyers","#d97706"]]},
-  "Men's Fashion":{total:4.1,female:20,age:[[18,24,36],[25,34,38],[35,44,19],[45,99,7]],cities:[["Delhi",20],["Mumbai",14],["Kolkata",11],["Bengaluru",10],["Chennai",8]],segs:[[0.5,"Power Buyers (5+ orders)","#2563eb"],[1.4,"Repeat Buyers (2–4 orders)","#16a34a"],[2.2,"One-time Buyers","#d97706"]]},
-  "Jewellery & Accessories":{total:3.8,female:92,age:[[18,24,20],[25,34,38],[35,44,30],[45,99,12]],cities:[["Jaipur",22],["Mumbai",16],["Delhi",14],["Surat",11],["Bengaluru",8]],segs:[[0.6,"Power Buyers (5+ orders)","#2563eb"],[1.2,"Repeat Buyers (2–4 orders)","#16a34a"],[2.0,"One-time Buyers","#d97706"]]},
-  "Footwear":{total:2.0,female:63,age:[[18,24,32],[25,34,40],[35,44,20],[45,99,8]],cities:[["Mumbai",17],["Delhi",16],["Bengaluru",13],["Agra",12],["Chennai",9]],segs:[[0.2,"Power Buyers (5+ orders)","#2563eb"],[0.7,"Repeat Buyers (2–4 orders)","#16a34a"],[1.1,"One-time Buyers","#d97706"]]},
-  "Home & Kitchen":{total:2.8,female:72,age:[[18,24,14],[25,34,36],[35,44,34],[45,99,16]],cities:[["Mumbai",15],["Delhi",14],["Bengaluru",12],["Pune",10],["Ahmedabad",9]],segs:[[0.4,"Power Buyers (5+ orders)","#2563eb"],[0.9,"Repeat Buyers (2–4 orders)","#16a34a"],[1.5,"One-time Buyers","#d97706"]]},
-  "Beauty & Personal Care":{total:3.1,female:82,age:[[18,24,38],[25,34,40],[35,44,16],[45,99,6]],cities:[["Delhi",18],["Mumbai",15],["Bengaluru",13],["Hyderabad",10],["Pune",8]],segs:[[0.6,"Power Buyers (5+ orders)","#2563eb"],[1.2,"Repeat Buyers (2–4 orders)","#16a34a"],[1.3,"One-time Buyers","#d97706"]]},
-  "Utility & Tools":{total:1.3,female:44,age:[[18,24,26],[25,34,42],[35,44,24],[45,99,8]],cities:[["Bengaluru",18],["Delhi",16],["Mumbai",14],["Pune",12],["Hyderabad",10]],segs:[[0.1,"Power Buyers (5+ orders)","#2563eb"],[0.4,"Repeat Buyers (2–4 orders)","#16a34a"],[0.8,"One-time Buyers","#d97706"]]}
+  "Women's Fashion":{total:180,female:88,age:[[18,24,28],[25,34,42],[35,44,22],[45,99,8]],cities:[["Mumbai",18],["Delhi",15],["Bengaluru",12],["Pune",9],["Hyderabad",8]],segs:[[0.20,"Power Buyers (5+ orders)","#2563eb"],[0.35,"Repeat Buyers (2–4 orders)","#16a34a"],[0.45,"One-time Buyers","#d97706"]]},
+  "Men's Fashion":{total:120,female:20,age:[[18,24,36],[25,34,38],[35,44,19],[45,99,7]],cities:[["Delhi",20],["Mumbai",14],["Kolkata",11],["Bengaluru",10],["Chennai",8]],segs:[[0.15,"Power Buyers (5+ orders)","#2563eb"],[0.35,"Repeat Buyers (2–4 orders)","#16a34a"],[0.50,"One-time Buyers","#d97706"]]},
+  "Jewellery & Accessories":{total:140,female:92,age:[[18,24,20],[25,34,38],[35,44,30],[45,99,12]],cities:[["Jaipur",22],["Mumbai",16],["Delhi",14],["Surat",11],["Bengaluru",8]],segs:[[0.18,"Power Buyers (5+ orders)","#2563eb"],[0.32,"Repeat Buyers (2–4 orders)","#16a34a"],[0.50,"One-time Buyers","#d97706"]]},
+  "Footwear":{total:100,female:63,age:[[18,24,32],[25,34,40],[35,44,20],[45,99,8]],cities:[["Mumbai",17],["Delhi",16],["Bengaluru",13],["Agra",12],["Chennai",9]],segs:[[0.12,"Power Buyers (5+ orders)","#2563eb"],[0.33,"Repeat Buyers (2–4 orders)","#16a34a"],[0.55,"One-time Buyers","#d97706"]]},
+  "Home & Kitchen":{total:90,female:72,age:[[18,24,14],[25,34,36],[35,44,34],[45,99,16]],cities:[["Mumbai",15],["Delhi",14],["Bengaluru",12],["Pune",10],["Ahmedabad",9]],segs:[[0.14,"Power Buyers (5+ orders)","#2563eb"],[0.34,"Repeat Buyers (2–4 orders)","#16a34a"],[0.52,"One-time Buyers","#d97706"]]},
+  "Beauty & Personal Care":{total:130,female:82,age:[[18,24,38],[25,34,40],[35,44,16],[45,99,6]],cities:[["Delhi",18],["Mumbai",15],["Bengaluru",13],["Hyderabad",10],["Pune",8]],segs:[[0.20,"Power Buyers (5+ orders)","#2563eb"],[0.38,"Repeat Buyers (2–4 orders)","#16a34a"],[0.42,"One-time Buyers","#d97706"]]},
+  "Utility & Tools":{total:70,female:44,age:[[18,24,26],[25,34,42],[35,44,24],[45,99,8]],cities:[["Bengaluru",18],["Delhi",16],["Mumbai",14],["Pune",12],["Hyderabad",10]],segs:[[0.10,"Power Buyers (5+ orders)","#2563eb"],[0.32,"Repeat Buyers (2–4 orders)","#16a34a"],[0.58,"One-time Buyers","#d97706"]]}
 };
-
 const SUBCAT_MUL = {"Kurtis & Kurta Sets":0.30,"Sarees":0.28,"Western Wear":0.17,"Lehengas":0.13,"Co-ord Sets":0.11,"Ethnic Dresses":0.10,"Fusion Wear":0.09,"T-Shirts & Polos":0.33,"Shirts":0.28,"Ethnic Wear / Kurta":0.19,"Jeans & Trousers":0.21,"Activewear":0.14,"Innerwear":0.10,"Earrings":0.34,"Necklaces & Chains":0.28,"Bangles & Bracelets":0.20,"Rings":0.16,"Nose Pins":0.08,"Anklets":0.06,"Watches":0.10,"Women's Flats":0.30,"Women's Heels":0.24,"Men's Casual":0.25,"Men's Formal":0.18,"Ethnic Footwear":0.12,"Sports Shoes":0.10,"Bedsheets & Linens":0.33,"Kitchen Organisers":0.23,"Decor & Figurines":0.17,"Storage Solutions":0.13,"Cushions & Curtains":0.09,"Cookware":0.10,"Skincare":0.34,"Haircare":0.27,"Makeup":0.22,"Lip Care":0.09,"Face Wash":0.11,"Fragrances":0.08,"Phone Accessories":0.28,"Cable Organisers":0.20,"Travel Accessories":0.17,"Stationery":0.14,"Fitness Tools":0.14,"Storage":0.10};
 
 function switchTab(i){
@@ -1680,8 +1725,9 @@ function hideAud(){
 }
 
 function fmtL(n){
+  if(n>=100) return Math.round(n)+'L';
   if(n>=10) return n.toFixed(1)+'L';
-  if(n>=1) return n.toFixed(2)+'L';
+  if(n>=1) return n.toFixed(1)+'L';
   return Math.round(n*100)+'K';
 }
 
@@ -1694,13 +1740,13 @@ function loadAudience(){
   const total=d.total*mul;
 
   document.getElementById('aud-num').textContent=fmtL(total);
-  document.getElementById('aud-label').textContent=(subcat||cat)+' buyers — last 24 months';
+  document.getElementById('aud-label').textContent=(subcat||cat)+' verified buyers — last 24 months';
   document.getElementById('pool-num').textContent=fmtL(total);
 
   // Segments
   const maxSeg=d.segs[2][0]*mul;
-  document.getElementById('seg-bars').innerHTML=d.segs.map(([v,name,color])=>{
-    const val=v*mul; const pct=Math.round((val/total)*100);
+  document.getElementById('seg-bars').innerHTML=d.segs.map(([frac,name,color])=>{
+    const val=total*mul*frac; const pct=Math.round(frac*100);
     return `<div class="seg-row">
       <span class="seg-name">${name.split('(')[0].trim()}</span>
       <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:${pct}%;background:${color}"></div></div>
