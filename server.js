@@ -87,7 +87,8 @@ function handleGenerate(req, res) {
 // ── Static file server ────────────────────────────────────────────────────────
 function serveStatic(req, res) {
   let filePath = req.url === "/" ? "/index.html" : req.url;
-  filePath = path.join(__dirname, "public", filePath);
+  // Serve from root directory (same folder as server.js)
+  filePath = path.join(__dirname, filePath);
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
