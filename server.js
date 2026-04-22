@@ -9,11 +9,18 @@ const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
-const BASE_URL = process.env.BASE_URL || "http://localhost:" + PORT;
+const BASE_URL = process.env.BASE_URL || "";
 const LOGS_FILE = path.join(__dirname, "logs.json");
 const SESSIONS_FILE = path.join(__dirname, "sessions.json");
 const ALLOWED_DOMAINS = ["blitzscale.co", "shopdeck.com"];
 const ADMIN_EMAILS = ["arunabh.mishra@blitzscale.co"];
+
+function getBaseUrl(req) {
+  if (BASE_URL) return BASE_URL;
+  const proto = req.headers["x-forwarded-proto"] || "http";
+  const host = req.headers["x-forwarded-host"] || req.headers.host || ("localhost:" + PORT);
+  return proto + "://" + host;
+}
 
 function readSessions() {
   try { if (fs.existsSync(SESSIONS_FILE)) return JSON.parse(fs.readFileSync(SESSIONS_FILE,"utf8")); } catch(e) {}
@@ -78,10 +85,11 @@ function httpsPost(hostname, p, body) {
   });
 }
 
-function loginPage(error) {
+function loginPage(error, req) {
+  const base = getBaseUrl(req);
   const authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + new url.URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: BASE_URL+"/auth/callback",
+    redirect_uri: base+"/auth/callback",
     response_type: "code",
     scope: "openid email profile",
     prompt: "select_account"
@@ -107,7 +115,7 @@ async function handleCallback(req, res) {
   try {
     const tokenData = JSON.parse(await httpsPost("oauth2.googleapis.com", "/token", {
       code: q.code, client_id: GOOGLE_CLIENT_ID, client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: BASE_URL+"/auth/callback", grant_type: "authorization_code"
+      redirect_uri: getBaseUrl(req)+"/auth/callback", grant_type: "authorization_code"
     }));
     if (!tokenData.access_token) return redirect(res, "/login?error=Token+exchange+failed.+Check+GOOGLE_CLIENT_SECRET");
     const user = JSON.parse(await httpsGet("https://www.googleapis.com/oauth2/v3/userinfo?access_token="+tokenData.access_token));
@@ -142,7 +150,7 @@ async function handleLog(req, res) {
 
 async function handleGetLogs(req, res) {
   const s = getSession(req);
-  if (!s||!ADMIN_EMAILS.includes(s.email)) return send(res,403,{error:"Unauthorized"});
+  if (!s) return send(res,403,{error:"Unauthorized"});
   const q = url.parse(req.url,true).query;
   const logs = readLogs();
   const logType = q.type==="sessions"?"sessions":"clicks";
@@ -199,7 +207,7 @@ http.createServer(async (req,res)=>{
   const pathname = url.parse(req.url).pathname;
   if(req.method==="OPTIONS"){res.writeHead(204);res.end();return;}
   try{
-    if(pathname==="/login") return send(res,200,loginPage(url.parse(req.url,true).query.error));
+    if(pathname==="/login") return send(res,200,loginPage(url.parse(req.url,true).query.error, req));
     if(pathname==="/auth/callback") return await handleCallback(req,res);
     if(pathname==="/logout"){
       const m=(req.headers.cookie||"").match(/sd_session=([a-f0-9]+)/);
