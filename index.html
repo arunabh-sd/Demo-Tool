@@ -1283,7 +1283,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
           <div class="creator-cats"><span class="creator-cat">Women's Fashion</span><span class="creator-cat">Ethnic</span></div>
           <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px">
             <div class="creator-earn">Earns upto ₹80K/mo</div>
-            <button class="btn btn-primary btn-sm">Invite →</button>
+            <button class="btn btn-primary btn-sm" onclick="logEvent('creator_invite','AI Creatives','creator_1')">Invite →</button>
           </div>
         </div>
       </div>
@@ -1307,7 +1307,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
           <div class="creator-cats"><span class="creator-cat">Beauty</span><span class="creator-cat">Skincare</span></div>
           <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px">
             <div class="creator-earn">Earns upto ₹60K/mo</div>
-            <button class="btn btn-primary btn-sm">Invite →</button>
+            <button class="btn btn-primary btn-sm" onclick="logEvent('creator_invite','AI Creatives','creator_2')">Invite →</button>
           </div>
         </div>
       </div>
@@ -1331,7 +1331,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
           <div class="creator-cats"><span class="creator-cat">Jewellery</span><span class="creator-cat">Sarees</span></div>
           <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px">
             <div class="creator-earn">Earns upto ₹1L/mo</div>
-            <button class="btn btn-primary btn-sm">Invite →</button>
+            <button class="btn btn-primary btn-sm" onclick="logEvent('creator_invite','AI Creatives','creator_3')">Invite →</button>
           </div>
         </div>
       </div>
@@ -1439,7 +1439,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
               <div class="app-action-body">Find historical audiences that worked best with high-AOV products. Exclude top 50 RTO pincodes from active campaigns. Expected impact: −8% abs RTO.</div>
               <div class="app-btn-row" id="a1-btns">
                 <button class="app-ok-btn" onclick="appApprove(1)">✓ Approve</button>
-                <button class="app-pass-btn">Discuss</button>
+                <button class="app-pass-btn" onclick="logEvent('app_discuss','Seller App','strategy_1')">Discuss</button>
               </div>
               <div class="app-done-badge" id="a1-done">✅ Approved — ShopDeck executing now</div>
             </div>
@@ -1449,7 +1449,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
               <div class="app-action-body">Build UGC videos for next 5 products. Switch to AI creative testing mode — 50 variants per product over 7 days to find winning creatives.</div>
               <div class="app-btn-row" id="a2-btns">
                 <button class="app-ok-btn" onclick="appApprove(2)">✓ Approve</button>
-                <button class="app-pass-btn">Discuss</button>
+                <button class="app-pass-btn" onclick="logEvent('app_discuss','Seller App','strategy_2')">Discuss</button>
               </div>
               <div class="app-done-badge" id="a2-done">✅ Approved — ShopDeck executing now</div>
             </div>
@@ -1668,59 +1668,15 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
 </div>
 
 
-<div class="tab-panel" id="panel-5">
+<div class="tab-panel" id="panel-5" style="padding-left:16px">
   <div class="page-header">
-    <div class="excl-badge" style="background:#fef3c7;color:#92400e;border-color:#fde68a">🔒 Admin Only</div>
     <div class="page-title">Usage Logs</div>
     <div class="page-sub">All sessions and click events tracked per user</div>
   </div>
   <div class="card" style="margin-bottom:20px">
     <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
       <div class="form-group"><label>Type</label>
-        <select id="log-type-sel"><option value="clicks">Click Events</option><option value="sessions">Sessions</option></select>
-      </div>
-      <div class="form-group"><label>From</label><input type="date" id="log-from" style="padding:9px 12px"></div>
-      <div class="form-group"><label>To</label><input type="date" id="log-to" style="padding:9px 12px"></div>
-      <button class="btn btn-primary" id="log-fetch-btn" style="height:40px;align-self:flex-end">Load Logs</button>
-    </div>
-  </div>
-  <div id="log-summary" class="grid4" style="margin-bottom:20px;display:none">
-    <div class="card card-sm" style="text-align:center"><div class="label">Total Events</div><div class="stat-num" id="log-total" style="color:var(--blue)">—</div></div>
-    <div class="card card-sm" style="text-align:center"><div class="label">Unique Users</div><div class="stat-num" id="log-users" style="color:var(--green)">—</div></div>
-    <div class="card card-sm" style="text-align:center"><div class="label">Most Active</div><div style="font-size:12px;font-weight:600;margin-top:4px" id="log-top-user">—</div></div>
-    <div class="card card-sm" style="text-align:center"><div class="label">Latest</div><div style="font-size:11px;font-weight:600;margin-top:4px" id="log-latest">—</div></div>
-  </div>
-  <div class="card" style="margin-bottom:16px">
-    <div style="font-size:13px;font-weight:700;margin-bottom:12px">By User</div>
-    <div id="log-by-user" style="font-size:13px;color:var(--text3)">Load logs to see data</div>
-  </div>
-  <div class="card">
-    <div style="font-size:13px;font-weight:700;margin-bottom:12px">Recent Events</div>
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead><tr style="border-bottom:2px solid var(--border)">
-          <th style="text-align:left;padding:7px 10px;color:var(--text3);font-weight:600">Time</th>
-          <th style="text-align:left;padding:7px 10px;color:var(--text3);font-weight:600">Email</th>
-          <th style="text-align:left;padding:7px 10px;color:var(--text3);font-weight:600">Action</th>
-          <th style="text-align:left;padding:7px 10px;color:var(--text3);font-weight:600">Tab</th>
-        </tr></thead>
-        <tbody id="log-tbody"><tr><td colspan="4" style="padding:20px;text-align:center;color:var(--text3)">No data loaded</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-</div><!-- /content -->
-<div class="tab-panel" id="panel-5">
-  <div class="page-header">
-    <div class="excl-badge" style="background:#fef3c7;color:#92400e;border-color:#fde68a">🔒 Admin Only</div>
-    <div class="page-title">Usage Logs</div>
-    <div class="page-sub">All sessions and click events tracked per user</div>
-  </div>
-  <div class="card" style="margin-bottom:20px">
-    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
-      <div class="form-group"><label>Type</label>
-        <select id="log-type-sel"><option value="clicks">Click Events</option><option value="sessions">Sessions</option></select>
+        <select id="log-type-sel" onchange="logEvent('logs_type_change','Logs',this.value)"><option value="clicks">Click Events</option><option value="sessions">Sessions</option></select>
       </div>
       <div class="form-group"><label>From</label><input type="date" id="log-from" style="padding:9px 12px"></div>
       <div class="form-group"><label>To</label><input type="date" id="log-to" style="padding:9px 12px"></div>
@@ -1786,6 +1742,8 @@ function switchTab(i){
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
   document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active',i===j));
   if(i===1) setTimeout(drawIndiaRTODots,80);
+  var tabNames=['Audience Intelligence','RTO Shield','AI Creatives','Seller App','Profit Calculator','Logs'];
+  logEvent('tab_switch','nav',tabNames[i]||String(i));
 }
 
 function onCatChange(){
@@ -1812,6 +1770,7 @@ function loadAudience(){
   const cat=document.getElementById('cat-select').value;
   const subcat=document.getElementById('subcat-select').value;
   if(!cat){alert('Please select a category first');return;}
+  logEvent('load_audience','Audience Intelligence',cat+(subcat?' > '+subcat:''));
   const d=AUD[cat];
   const mul=subcat&&SUBCAT_MUL[subcat]?SUBCAT_MUL[subcat]:1;
   const total=d.total*mul;
@@ -1862,6 +1821,7 @@ function loadAudience(){
 }
 
 function pushMeta(){
+  logEvent('push_meta_audience','Audience Intelligence','');
   document.getElementById('meta-success').style.display='block';
 }
 
@@ -1944,6 +1904,7 @@ async function generateCreative(){
   const theme=document.getElementById('gen-theme').value;
   const tagline=document.getElementById('gen-tagline').value.trim();
   if(!cat||!theme){alert('Please select category and theme');return;}
+  logEvent('generate_creative','AI Creatives',cat+' | '+theme);
 
   const idle=document.getElementById('gen-idle');
   const spinner=document.getElementById('gen-spinner-wrap');
@@ -1983,6 +1944,7 @@ async function generateCreative(){
 
 // APP NAV
 function switchApp(scr){
+  logEvent('seller_app_nav','Seller App',scr);
   ['home','strategy','chat'].forEach(s=>{
     const el=document.getElementById('app-'+s);
     if(el)el.classList.toggle('active',s===scr);
@@ -1997,6 +1959,7 @@ function setActiveFeat(el){
   el.classList.add('active-feat');
 }
 function appApprove(n){
+  logEvent('app_approve','Seller App','strategy_'+n);
   document.getElementById('a'+n+'-btns').style.display='none';
   const bd=document.getElementById('a'+n+'-done');
   bd.style.display='flex';
@@ -2135,9 +2098,13 @@ function drawIndiaRTODots(){
       chip.innerHTML='<div class="seller-dot"></div><span>'+(d.name||d.email)+'</span>';
       var tr=document.querySelector('.topbar-right');if(tr)tr.insertBefore(chip,tr.firstChild);
     }catch(e){}
-    try{var lt=document.getElementById('logs-tab');if(lt)lt.style.display='flex';}catch(e){}
-    try{var lfb=document.getElementById('log-fetch-btn');if(lfb)lfb.addEventListener('click',fetchLogs);}catch(e){}
+    var LOGS_EMAILS=['arunabh.mishra@blitzscale.co','krishna.agrawal@blitzscale.co','maruti.pandey@blitzscale.co'];
+    if(LOGS_EMAILS.includes(d.email)){
+      try{var lt=document.getElementById('logs-tab');if(lt)lt.style.display='flex';}catch(e){}
+      try{var lfb=document.getElementById('log-fetch-btn');if(lfb)lfb.addEventListener('click',fetchLogs);}catch(e){}
+    }
     logEvent('session_start','app','');
+    try{var td=new Date().toISOString().slice(0,10);var lf=document.getElementById('log-from');var lt2=document.getElementById('log-to');if(lf)lf.value=td;if(lt2)lt2.value=td;}catch(e){}
   }).catch(function(){window.location.href='/login';});
 })();
 

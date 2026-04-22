@@ -14,6 +14,7 @@ const LOGS_FILE = path.join(__dirname, "logs.json");
 const SESSIONS_FILE = path.join(__dirname, "sessions.json");
 const ALLOWED_DOMAINS = ["blitzscale.co", "shopdeck.com"];
 const ADMIN_EMAILS = ["arunabh.mishra@blitzscale.co"];
+const LOGS_EMAILS = ["arunabh.mishra@blitzscale.co","krishna.agrawal@blitzscale.co","maruti.pandey@blitzscale.co"];
 
 function getBaseUrl(req) {
   if (BASE_URL) return BASE_URL;
@@ -151,6 +152,7 @@ async function handleLog(req, res) {
 async function handleGetLogs(req, res) {
   const s = getSession(req);
   if (!s) return send(res,403,{error:"Unauthorized"});
+  if (!LOGS_EMAILS.includes(s.email)) return send(res,403,{error:"Access denied"});
   const q = url.parse(req.url,true).query;
   const logs = readLogs();
   const logType = q.type==="sessions"?"sessions":"clicks";
