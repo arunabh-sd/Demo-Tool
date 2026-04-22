@@ -2193,17 +2193,21 @@ function onGoogleSignIn(resp){
   if(ALLOWED.indexOf(domain)===-1){showAuthErr('Access denied. Only blitzscale.co and shopdeck.com accounts permitted.'); return;}
   currentUser={email:email,name:p.name||email,isAdmin:ADMINS.indexOf(email)!==-1};
   document.getElementById('auth-overlay').style.display='none';
-  var chip=document.createElement('div');
-  chip.className='seller-chip';
-  chip.innerHTML='<div class="seller-dot"></div><span>'+currentUser.name+'</span>';
-  document.querySelector('.topbar-right').insertBefore(chip,document.querySelector('.topbar-right').firstChild);
+  try{
+    var chip=document.createElement('div');
+    chip.className='seller-chip';
+    chip.innerHTML='<div class="seller-dot"></div><span>'+currentUser.name+'</span>';
+    var tr=document.querySelector('.topbar-right');
+    if(tr) tr.insertBefore(chip,tr.firstChild);
+  }catch(e){}
   if(currentUser.isAdmin){
     var lt=document.getElementById('logs-tab');
     if(lt) lt.style.display='flex';
-    document.getElementById('log-fetch-btn').addEventListener('click',fetchLogs);
+    var lfb=document.getElementById('log-fetch-btn');
+    if(lfb) lfb.addEventListener('click',fetchLogs);
   }
-  fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:resp.credential})}).catch(function(){});
-  logEvent('session_start','app','');
+  try{fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:resp.credential})}).catch(function(){});}catch(e){}
+  try{logEvent('session_start','app','');}catch(e){}
 }
 
 function showAuthErr(msg){
