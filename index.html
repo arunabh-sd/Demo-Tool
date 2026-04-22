@@ -2209,6 +2209,8 @@ function onGoogleSignIn(resp){
   try{fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:resp.credential})}).catch(function(){});}catch(e){}
   try{logEvent('session_start','app','');}catch(e){}
 }
+window.onGoogleSignIn = onGoogleSignIn;
+
 
 function showAuthErr(msg){
   var el=document.getElementById('auth-error');
@@ -2253,6 +2255,35 @@ document.querySelectorAll('[data-screen]').forEach(function(el){
     switchApp(el.dataset.screen);
     if(el.dataset.feat) setActiveFeat(el);
   });
+});
+
+// Initialize Google Sign-In programmatically as backup
+window.addEventListener('load', function() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    setTimeout(function() {
+      if (typeof google !== 'undefined' && google.accounts) {
+        google.accounts.id.initialize({
+          client_id: '943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com',
+          callback: onGoogleSignIn,
+          auto_select: false
+        });
+        google.accounts.id.renderButton(
+          document.querySelector('.g_id_signin'),
+          {theme:'outline', size:'large', shape:'rectangular', text:'signin_with'}
+        );
+      }
+    }, 1500);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: '943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com',
+    callback: onGoogleSignIn,
+    auto_select: false
+  });
+  google.accounts.id.renderButton(
+    document.querySelector('.g_id_signin'),
+    {theme:'outline', size:'large', shape:'rectangular', text:'signin_with'}
+  );
 });
 </script>
 </body>
