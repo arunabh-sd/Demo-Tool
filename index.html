@@ -617,14 +617,17 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
 .tooltip-label { color: var(--text3); }
 .tooltip-val { font-weight: 600; }
 </style>
-  <script src="https://accounts.google.com/gsi/client" async defer>
+  <script>
+
 // Wire data-screen elements
 document.querySelectorAll('[data-screen]').forEach(function(el){
   el.addEventListener('click',function(){
     switchApp(el.dataset.screen);
     if(el.dataset.feat) setActiveFeat(el);
   });
-});
+}
+window.onGoogleSignIn = onGoogleSignIn;
+);
 
 // Wire data-screen nav elements (seller app)
 document.querySelectorAll('[data-screen]').forEach(function(el){
@@ -633,21 +636,156 @@ document.querySelectorAll('[data-screen]').forEach(function(el){
     if(el.dataset.feat) setActiveFeat(el);
   });
 });
+
+// Programmatic GSI init fallback
+function initGoogleSignIn() {
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: '943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com',
+      callback: onGoogleSignIn,
+      auto_select: false
+    });
+    var btn = document.querySelector('.g_id_signin');
+    if (btn && !btn.hasChildNodes()) {
+      google.accounts.id.renderButton(btn, {theme:'outline',size:'large',shape:'rectangular',text:'signin_with'});
+    }
+  }
+}
+// Try immediately and after delays for async loading
+setTimeout(initGoogleSignIn, 500);
+setTimeout(initGoogleSignIn, 1500);
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+var currentUser = null;
+
+function decodeJWT(token) {
+  try {
+    var b = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    var pad = b.length % 4;
+    if (pad) b += '===='.slice(pad);
+    return JSON.parse(atob(b));
+  } catch(e) { return null; }
+}
+
+function onGoogleSignIn(resp) {
+  var p = decodeJWT(resp.credential);
+  if (!p || !p.email) { showAuthErr('Could not read account info. Try again.'); return; }
+  var email = p.email;
+  var domain = email.split('@')[1];
+  var ALLOWED = ['blitzscale.co', 'shopdeck.com'];
+  var ADMINS = ['arunabh.mishra@blitzscale.co'];
+  if (ALLOWED.indexOf(domain) === -1) {
+    showAuthErr('Access denied. Only blitzscale.co and shopdeck.com accounts permitted.');
+    return;
+  }
+  currentUser = { email: email, name: p.name || email, isAdmin: ADMINS.indexOf(email) !== -1 };
+  document.getElementById('auth-overlay').style.display = 'none';
+  try {
+    var chip = document.createElement('div');
+    chip.className = 'seller-chip';
+    chip.innerHTML = '<div class="seller-dot"></div><span>' + currentUser.name + '</span>';
+    var tr = document.querySelector('.topbar-right');
+    if (tr) tr.insertBefore(chip, tr.firstChild);
+  } catch(e) {}
+  if (currentUser.isAdmin) {
+    try {
+      var lt = document.getElementById('logs-tab');
+      if (lt) lt.style.display = 'flex';
+      var lfb = document.getElementById('log-fetch-btn');
+      if (lfb) lfb.addEventListener('click', fetchLogs);
+    } catch(e) {}
+  }
+  try { fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({idToken: resp.credential})}).catch(function(){}); } catch(e) {}
+  try { logEvent('session_start', 'app', ''); } catch(e) {}
+}
+
+window.onGoogleSignIn = onGoogleSignIn;
+
+function showAuthErr(msg) {
+  var el = document.getElementById('auth-error');
+  if (el) el.textContent = msg;
+}
+
+function logEvent(action, tab, detail) {
+  if (!currentUser) return;
+  try {
+    fetch('/api/log', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email: currentUser.email, action: action, tab: tab, detail: detail || ''})
+    }).catch(function(){});
+  } catch(e) {}
+}
+
+// ── LOGS ──────────────────────────────────────────────────────────────────────
+function fetchLogs() {
+  if (!currentUser || !currentUser.isAdmin) return;
+  var type = document.getElementById('log-type-sel').value;
+  var from = document.getElementById('log-from').value;
+  var to = document.getElementById('log-to').value;
+  var qs = '?email=' + encodeURIComponent(currentUser.email) + '&type=' + type + (from?'&from='+from:'') + (to?'&to='+to:'');
+  fetch('/api/logs' + qs).then(function(r){return r.json();}).then(function(data){
+    document.getElementById('log-total').textContent = data.total || 0;
+    var users = Object.keys(data.byEmail || {});
+    document.getElementById('log-users').textContent = users.length;
+    var top = users.sort(function(a,b){return (data.byEmail[b].count||0)-(data.byEmail[a].count||0);})[0];
+    document.getElementById('log-top-user').textContent = top ? top + ' (' + data.byEmail[top].count + ')' : '-';
+    var entries = data.entries || [];
+    document.getElementById('log-latest').textContent = entries.length ? new Date(entries[entries.length-1].ts).toLocaleString('en-IN') : '-';
+    document.getElementById('log-summary').style.display = 'grid';
+    var byUserRows = users.sort(function(a,b){return (data.byEmail[b].count||0)-(data.byEmail[a].count||0);}).map(function(e){
+      return '<tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px">' + e + '</td><td style="padding:7px 10px;text-align:right;font-weight:600">' + data.byEmail[e].count + '</td><td style="padding:7px 10px;text-align:right;color:var(--text3)">' + new Date(data.byEmail[e].lastSeen).toLocaleString('en-IN') + '</td></tr>';
+    }).join('');
+    document.getElementById('log-by-user').innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 10px;color:var(--text3)">Email</th><th style="text-align:right;padding:6px 10px;color:var(--text3)">Events</th><th style="text-align:right;padding:6px 10px;color:var(--text3)">Last Seen</th></tr></thead><tbody>' + byUserRows + '</tbody></table>';
+    var tbody = document.getElementById('log-tbody');
+    tbody.innerHTML = entries.slice().reverse().map(function(e){
+      return '<tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 10px;color:var(--text3);white-space:nowrap">' + new Date(e.ts).toLocaleString('en-IN') + '</td><td style="padding:5px 10px">' + e.email + '</td><td style="padding:5px 10px">' + e.action + '</td><td style="padding:5px 10px;color:var(--text3)">' + e.tab + '</td></tr>';
+    }).join('');
+  }).catch(function(){ alert('Failed to load logs'); });
+}
+
+// ── GSI PROGRAMMATIC INIT ─────────────────────────────────────────────────────
+function initGoogleSignIn() {
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: '943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com',
+      callback: window.onGoogleSignIn,
+      auto_select: false
+    });
+    var btn = document.querySelector('.g_id_signin');
+    if (btn) {
+      google.accounts.id.renderButton(btn, {theme:'outline', size:'large', shape:'rectangular', text:'signin_with'});
+    }
+  }
+}
+setTimeout(initGoogleSignIn, 300);
+setTimeout(initGoogleSignIn, 1200);
 </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
 <div id="auth-overlay" style="position:fixed;inset:0;background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);z-index:9999;display:flex;align-items:center;justify-content:center">
-  <div style="background:white;border-radius:16px;padding:48px 40px;max-width:400px;width:90%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.4)">
+  <div style="background:white;border-radius:16px;padding:48px 40px;max-width:420px;width:90%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.4)">
     <svg width="36" height="36" viewBox="0 0 28 28" fill="none" style="margin-bottom:16px"><rect width="28" height="28" rx="6" fill="#2563eb"/><rect x="6" y="6" width="11" height="11" rx="2.5" stroke="white" stroke-width="2" fill="none"/><rect x="11" y="11" width="11" height="11" rx="2.5" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" fill="none"/></svg>
     <div style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:6px">ShopDeck Demo</div>
-    <div style="font-size:13px;color:#64748b;margin-bottom:28px">Sign in with your ShopDeck or Blitzscale account</div>
-    <div id="g_id_onload" data-client_id="943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com" data-callback="onGoogleSignIn" data-auto_select="false"></div>
-    <div class="g_id_signin" data-type="standard" data-theme="outline" data-size="large" data-shape="rectangular" style="display:flex;justify-content:center"></div>
-    <div id="auth-error" style="margin-top:14px;font-size:12px;color:#dc2626;min-height:18px"></div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:28px">Sign in with your ShopDeck or Blitzscale Google account</div>
+    <div id="g_id_onload"
+      data-client_id="943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com"
+      data-callback="onGoogleSignIn"
+      data-auto_select="false">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-theme="outline"
+      data-size="large"
+      data-text="signin_with"
+      data-shape="rectangular"
+      style="display:flex;justify-content:center;margin-bottom:8px">
+    </div>
+    <div id="auth-error" style="margin-top:8px;font-size:12px;color:#dc2626;min-height:18px"></div>
     <div style="margin-top:16px;font-size:11px;color:#94a3b8">Only blitzscale.co and shopdeck.com accounts</div>
   </div>
 </div>
+
 
 
 <!-- TOPBAR -->
@@ -2184,34 +2322,43 @@ function decodeJWT(token){
   }catch(e){return null;}
 }
 
-function onGoogleSignIn(resp){
-  var p=decodeJWT(resp.credential);
-  if(!p||!p.email){showAuthErr('Could not read account. Try again.'); return;}
-  var email=p.email, domain=email.split('@')[1];
-  var ALLOWED=['blitzscale.co','shopdeck.com'];
-  var ADMINS=['arunabh.mishra@blitzscale.co'];
-  if(ALLOWED.indexOf(domain)===-1){showAuthErr('Access denied. Only blitzscale.co and shopdeck.com accounts permitted.'); return;}
-  currentUser={email:email,name:p.name||email,isAdmin:ADMINS.indexOf(email)!==-1};
-  document.getElementById('auth-overlay').style.display='none';
-  try{
-    var chip=document.createElement('div');
-    chip.className='seller-chip';
-    chip.innerHTML='<div class="seller-dot"></div><span>'+currentUser.name+'</span>';
-    var tr=document.querySelector('.topbar-right');
-    if(tr) tr.insertBefore(chip,tr.firstChild);
-  }catch(e){}
-  if(currentUser.isAdmin){
-    var lt=document.getElementById('logs-tab');
-    if(lt) lt.style.display='flex';
-    var lfb=document.getElementById('log-fetch-btn');
-    if(lfb) lfb.addEventListener('click',fetchLogs);
+
+
+
+function doEmailLogin(){
+  var email = (document.getElementById('auth-email').value || '').trim().toLowerCase();
+  var errEl = document.getElementById('auth-error');
+  errEl.textContent = '';
+  if (!email) { errEl.textContent = 'Please enter your email address.'; return; }
+  if (email.indexOf('@') === -1) { errEl.textContent = 'Please enter a valid email.'; return; }
+  var domain = email.split('@')[1];
+  var ALLOWED = ['blitzscale.co', 'shopdeck.com'];
+  var ADMINS = ['arunabh.mishra@blitzscale.co'];
+  if (ALLOWED.indexOf(domain) === -1) {
+    errEl.textContent = 'Access denied. Only blitzscale.co and shopdeck.com accounts permitted.';
+    return;
   }
-  try{fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:resp.credential})}).catch(function(){});}catch(e){}
-  try{logEvent('session_start','app','');}catch(e){}
+  // Access granted
+  var name = email.split('@')[0].replace(/\./, ' ');
+  name = name.charAt(0).toUpperCase() + name.slice(1);
+  currentUser = {email: email, name: name, isAdmin: ADMINS.indexOf(email) !== -1};
+  document.getElementById('auth-overlay').style.display = 'none';
+  try {
+    var chip = document.createElement('div');
+    chip.className = 'seller-chip';
+    chip.innerHTML = '<div class="seller-dot"></div><span>' + name + '</span>';
+    var tr = document.querySelector('.topbar-right');
+    if (tr) tr.insertBefore(chip, tr.firstChild);
+  } catch(e) {}
+  if (currentUser.isAdmin) {
+    var lt = document.getElementById('logs-tab');
+    if (lt) lt.style.display = 'flex';
+    var lfb = document.getElementById('log-fetch-btn');
+    if (lfb) lfb.addEventListener('click', fetchLogs);
+  }
+  try { fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: email, name: name})}).catch(function(){}); } catch(e) {}
+  try { logEvent('session_start', 'app', ''); } catch(e) {}
 }
-window.onGoogleSignIn = onGoogleSignIn;
-
-
 function showAuthErr(msg){
   var el=document.getElementById('auth-error');
   if(el){el.textContent=msg;}
@@ -2285,6 +2432,13 @@ window.addEventListener('load', function() {
     {theme:'outline', size:'large', shape:'rectangular', text:'signin_with'}
   );
 });
+
+// Wire email input enter key
+var emailInput = document.getElementById('auth-email-input');
+if (emailInput) {
+  emailInput.id = 'auth-email';
+  emailInput.addEventListener('keydown', function(e){ if(e.key==='Enter') doEmailLogin(); });
+}
 </script>
 </body>
 </html>
