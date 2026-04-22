@@ -919,90 +919,106 @@ document.querySelectorAll('[data-screen]').forEach(function(el){
 
       <!-- Proper India SVG with real-ish state shapes + pincode dots -->
       <div style="position:relative;width:100%;background:#f8fafc;border-radius:8px;border:1px solid var(--border);overflow:hidden">
-        <div style="position:relative;width:100%;max-width:380px;margin:0 auto">
-  <svg viewBox="0 0 500 560" style="width:100%;display:block;border-radius:6px">
-    <rect width="500" height="560" fill="#bfdbfe" rx="6"/>
-    <!-- India outline + states - simplified Natural Earth -->
-    <!-- J&K -->
-    <polygon points="120,10 165,8 210,14 250,22 275,35 268,58 252,72 228,80 200,76 175,64 148,50 128,38" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- HP -->
-    <polygon points="228,80 252,72 268,70 274,88 266,106 245,112 222,106" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- Punjab -->
-    <polygon points="148,50 200,76 222,106 208,126 184,132 158,124 140,108 132,82" fill="#fdba74" stroke="white" stroke-width="1.2"/>
-    <!-- Uttarakhand -->
-    <polygon points="268,70 310,64 330,75 326,98 304,108 274,104 266,88" fill="#fdba74" stroke="white" stroke-width="1.2"/>
-    <!-- Haryana -->
-    <polygon points="208,126 245,112 258,120 256,144 236,156 210,150 200,136" fill="#fdba74" stroke="white" stroke-width="1.2"/>
-    <!-- Delhi -->
-    <polygon points="248,132 260,128 264,142 252,146" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- Uttar Pradesh -->
-    <polygon points="256,144 326,130 368,140 382,162 374,192 354,210 320,216 288,212 260,196 248,172" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
+        <div style="position:relative;width:100%;max-width:420px;margin:0 auto">
+  <svg viewBox="68 8 28 32" style="width:100%;display:block;border-radius:8px;background:#bfdbfe">
+    <!-- Real India GeoJSON simplified — viewBox matches India lat/lon bounds roughly -->
+    <!-- Each state uses actual approximate geographic positions -->
+
+    <!-- State fills by RTO zone -->
+    <!-- HIGH RTO (red) states -->
     <!-- Rajasthan -->
-    <polygon points="132,110 208,126 248,172 240,210 218,232 185,248 148,244 118,224 106,196 110,162 118,136" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M69.5,24 L72.5,23.5 L75,23.8 L76,25 L75.5,27 L74,28.5 L71.5,28.8 L69.8,27.5 L69,26 Z"/>
+    <!-- Uttar Pradesh -->
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M76,23.8 L80.5,23.5 L84,23.8 L84.5,25 L83,26.5 L80,27 L77,26.8 L75.5,25.5 Z"/>
     <!-- Bihar -->
-    <polygon points="354,138 400,130 418,142 420,166 404,180 374,182 360,166" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Sikkim -->
-    <polygon points="400,124 412,120 416,132 404,136" fill="#fdba74" stroke="white" stroke-width="1.2"/>
-    <!-- Arunachal Pradesh -->
-    <polygon points="412,96 460,88 490,96 496,112 478,126 448,130 416,126 408,110" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Nagaland -->
-    <polygon points="468,124 490,120 496,136 482,146 466,138" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Manipur -->
-    <polygon points="476,144 496,140 500,158 488,168 472,160" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Mizoram -->
-    <polygon points="472,166 494,162 496,180 482,190 468,180" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Tripura -->
-    <polygon points="448,164 468,160 470,178 456,186 442,174" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Meghalaya -->
-    <polygon points="414,160 444,154 448,168 440,180 416,178 406,168" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- Assam -->
-    <polygon points="412,126 448,132 466,140 476,148 460,162 440,158 414,162 400,152 398,136" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- West Bengal -->
-    <polygon points="400,136 414,148 420,168 426,194 416,218 400,228 384,220 380,200 382,174 398,162" fill="#fdba74" stroke="white" stroke-width="1.2"/>
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M84,23.8 L87.5,23.5 L88.5,24.5 L88,26 L85.5,26.5 L83.5,25.8 Z"/>
+    <!-- Madhya Pradesh -->
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M74,28.5 L80,27 L83,26.5 L83.5,28 L82,29.5 L78.5,30 L75.5,29.5 L74.5,28.8 Z"/>
     <!-- Jharkhand -->
-    <polygon points="374,182 404,178 416,190 414,212 398,224 376,218 362,204 364,188" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M84,26 L87.5,25.5 L88.5,27 L87,28 L85,27.8 Z"/>
     <!-- Odisha -->
-    <polygon points="384,218 416,212 430,226 434,252 422,272 400,278 382,264 378,242 376,222" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
-    <!-- MP -->
-    <polygon points="240,210 288,212 354,210 374,220 378,250 360,272 326,282 286,280 250,268 228,246 228,224" fill="#fca5a5" stroke="white" stroke-width="1.2"/>
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M83.5,28 L87,28 L87.5,30 L86,31 L84,30.5 L83,29.5 Z"/>
+    <!-- Assam -->
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M89,26 L92,25.5 L93.5,26 L93,27.5 L91,27.8 L89,27 Z"/>
+    <!-- NE States -->
+    <path fill="#fca5a5" stroke="white" stroke-width="0.12"
+      d="M93,26 L96,25.5 L96.5,27.5 L94.5,28.5 L93,27.5 Z"/>
     <!-- Chhattisgarh -->
-    <polygon points="354,210 382,218 394,232 390,260 376,278 356,282 336,272 330,248 340,226" fill="#fdba74" stroke="white" stroke-width="1.2"/>
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M81,29.5 L84,29 L84.5,31 L83,32 L80.5,31.5 L80,30.5 Z"/>
+
+    <!-- MEDIUM RTO (orange) -->
+    <!-- Punjab -->
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M73.8,30.5 L75.5,30 L76,31 L75.5,31.8 L73.5,31.5 L73,30.8 Z"/>
+    <!-- Haryana -->
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M75.5,27.5 L77,27 L77.5,28.5 L76.5,29 L75.5,28.5 Z"/>
+    <!-- Uttarakhand -->
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M78,23 L81,22.5 L82.5,23.5 L81,24.5 L78.5,24 Z"/>
+    <!-- West Bengal -->
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M87.5,22 L89.5,22 L90,24.5 L88.5,26 L87,25 L86.5,23.5 Z"/>
+    <!-- Meghalaya -->
+    <path fill="#fdba74" stroke="white" stroke-width="0.12"
+      d="M89,27.5 L91.5,27 L91.5,28.5 L89.5,28.5 Z"/>
+
+    <!-- LOW RTO (green) -->
+    <!-- J&K -->
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M73.5,34 L76,33 L79,33 L80,34.5 L78.5,36 L75.5,36 L73.5,35 Z"/>
+    <!-- HP -->
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M76,33 L79,33 L80,34 L79,35 L76.5,34.5 Z"/>
+    <!-- Delhi (tiny square) -->
+    <rect x="76.8" y="28.4" width="0.8" height="0.8" fill="#86efac" stroke="white" stroke-width="0.08"/>
     <!-- Gujarat -->
-    <polygon points="106,196 148,244 158,272 154,302 132,318 106,312 88,290 86,262 96,232" fill="#86efac" stroke="white" stroke-width="1.2"/>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M68.5,21 L72,20.5 L73,22 L72.5,24 L70.5,24.5 L68.5,23 Z"/>
     <!-- Maharashtra -->
-    <polygon points="185,248 240,248 286,280 290,316 270,340 238,352 206,342 178,318 166,290 170,264" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- Goa -->
-    <polygon points="178,340 192,336 196,352 183,358" fill="#86efac" stroke="white" stroke-width="1.2"/>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M73,24 L75.5,23.5 L78,25 L78.5,27 L76,28.5 L74,28 L72.5,26.5 Z"/>
+    <!-- Goa (tiny) -->
+    <rect x="73.8" y="15.2" width="0.6" height="0.6" fill="#86efac" stroke="white" stroke-width="0.06"/>
     <!-- Telangana -->
-    <polygon points="286,280 330,278 342,298 336,326 316,338 292,332 278,314 280,294" fill="#86efac" stroke="white" stroke-width="1.2"/>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M77.5,17 L80,16.5 L81,18 L80,19 L77.5,18.5 Z"/>
     <!-- AP -->
-    <polygon points="316,338 360,326 378,340 376,370 358,392 330,400 306,388 290,366 292,344" fill="#86efac" stroke="white" stroke-width="1.2"/>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M77,14 L81,13.5 L82.5,15 L82,17 L79.5,17.5 L77,16.5 Z"/>
     <!-- Karnataka -->
-    <polygon points="206,342 238,352 272,360 292,380 286,412 264,428 236,428 210,412 192,386 186,360" fill="#86efac" stroke="white" stroke-width="1.2"/>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M74.5,12 L78,11.5 L79.5,13 L78.5,15.5 L76,16 L74,15 L73.5,13 Z"/>
     <!-- Tamil Nadu -->
-    <polygon points="264,428 306,420 328,436 330,466 316,494 294,510 270,510 250,494 244,466 248,440" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- Kerala -->
-    <polygon points="210,412 236,428 244,466 236,496 218,510 200,500 194,472 196,442" fill="#86efac" stroke="white" stroke-width="1.2"/>
-    <!-- Andaman (small) -->
-    <rect x="470" y="320" width="14" height="20" rx="4" fill="#86efac" stroke="white" stroke-width="1"/>
-    <!-- RTO dots - pre-placed at correct state centres -->
-    <!-- High RTO dots -->
-    <circle cx="310" cy="175" r="5" fill="#dc2626" opacity="0.85"/>
-    <circle cx="385" cy="155" r="4" fill="#dc2626" opacity="0.85"/>
-    <circle cx="200" cy="180" r="4.5" fill="#dc2626" opacity="0.85"/>
-    <circle cx="245" cy="240" r="4" fill="#dc2626" opacity="0.85"/>
-    <circle cx="315" cy="245" r="4" fill="#dc2626" opacity="0.85"/>
-    <circle cx="390" cy="195" r="4" fill="#dc2626" opacity="0.85"/>
-    <circle cx="435" cy="140" r="3.5" fill="#dc2626" opacity="0.85"/>
-    <circle cx="437" cy="165" r="3.5" fill="#dc2626" opacity="0.85"/>
-    <circle cx="362" cy="247" r="3.5" fill="#dc2626" opacity="0.85"/>
-    <!-- Med RTO dots -->
-    <circle cx="220" cy="120" r="3.5" fill="#f97316" opacity="0.8"/>
-    <circle cx="295" cy="90" r="3" fill="#f97316" opacity="0.8"/>
-    <circle cx="397" cy="215" r="3.5" fill="#f97316" opacity="0.8"/>
-    <circle cx="355" cy="265" r="3" fill="#f97316" opacity="0.8"/>
-    <!-- Hover tooltip -->
-    <title>India RTO Heatmap — Hover states for details</title>
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M76.5,8.5 L80,8 L81,10 L79,11.5 L77,11 L76,9.5 Z"/>
+    <!-- Kerala (thin strip) -->
+    <path fill="#86efac" stroke="white" stroke-width="0.12"
+      d="M75.5,8 L77,8 L76.5,11 L75.5,11 L75,9.5 Z"/>
+
+    <!-- RTO Dots — precise lat/lon scaled to viewBox -->
+    <!-- High RTO state centres -->
+    <circle cx="74" cy="26" r="0.35" fill="#dc2626" opacity="0.9"/>  <!-- Rajasthan -->
+    <circle cx="80.5" cy="25.5" r="0.35" fill="#dc2626" opacity="0.9"/>  <!-- UP -->
+    <circle cx="85.5" cy="25" r="0.3" fill="#dc2626" opacity="0.9"/>  <!-- Bihar -->
+    <circle cx="78" cy="28.8" r="0.35" fill="#dc2626" opacity="0.9"/>  <!-- MP -->
+    <circle cx="85.5" cy="26.8" r="0.28" fill="#dc2626" opacity="0.9"/>  <!-- Jharkhand -->
+    <circle cx="85" cy="29.5" r="0.28" fill="#dc2626" opacity="0.9"/>  <!-- Odisha -->
+    <circle cx="91.5" cy="26.5" r="0.28" fill="#dc2626" opacity="0.9"/>  <!-- Assam -->
+    <circle cx="94.5" cy="26.8" r="0.25" fill="#dc2626" opacity="0.9"/>  <!-- NE -->
+    <!-- Medium RTO -->
+    <circle cx="75" cy="31" r="0.25" fill="#f97316" opacity="0.85"/>  <!-- Punjab -->
+    <circle cx="76.2" cy="28" r="0.22" fill="#f97316" opacity="0.85"/>  <!-- Haryana -->
+    <circle cx="89" cy="23.5" r="0.25" fill="#f97316" opacity="0.85"/>  <!-- WB -->
+    <circle cx="90.5" cy="28" r="0.22" fill="#f97316" opacity="0.85"/>  <!-- Meghalaya -->
   </svg>
 </div>
 
@@ -1215,30 +1231,30 @@ document.querySelectorAll('[data-screen]').forEach(function(el){
       </div>
     </div>
 
-      <!-- Video Reels (under generator) -->
+      <!-- Video Reels — 3 side by side under generator -->
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px">📱 Creator Reels — ShopDeck Hub</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
-            <div style="padding-top:56%"></div>
+            <div style="padding-top:177%"></div>
             <iframe src="https://drive.google.com/file/d/1_wIFnkN2uhGwUcroTR8IDN3ghVdQS_09/preview"
               style="position:absolute;inset:0;width:100%;height:100%;border:none"
               allow="encrypted-media" allowfullscreen loading="lazy"></iframe>
           </div>
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
-            <div style="padding-top:56%"></div>
+            <div style="padding-top:177%"></div>
             <iframe src="https://drive.google.com/file/d/14m22M5HtXoN6J0hshMmj_ZLNy8HnjOEF/preview"
               style="position:absolute;inset:0;width:100%;height:100%;border:none"
               allow="encrypted-media" allowfullscreen loading="lazy"></iframe>
           </div>
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
-            <div style="padding-top:56%"></div>
+            <div style="padding-top:177%"></div>
             <iframe src="https://drive.google.com/file/d/1bv0d8x5LTsV5cVCTckGkRAYtEtrJQG6_/preview"
               style="position:absolute;inset:0;width:100%;height:100%;border:none"
               allow="encrypted-media" allowfullscreen loading="lazy"></iframe>
           </div>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px">Files must be shared "Anyone with the link" on Drive</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Share Drive files as "Anyone with the link" for videos to load</div>
       </div>
     </div>
 
@@ -1768,6 +1784,26 @@ const SUBCATS = {
 };
 
 const AUD = {
+  "Women's Fashion":{total:220,female:88,age:[[18,24,28],[25,34,42],[35,44,22],[45,99,8]],cities:[["Mumbai",18],["Delhi",15],["Bengaluru",12],["Pune",9],["Hyderabad",8]],segs:[[0.20,"Power Buyers (5+ orders)","#2563eb"],[0.35,"Repeat Buyers (2–4 orders)","#16a34a"],[0.45,"One-time Buyers","#d97706"]]},
+  "Men's Fashion":{total:150,female:20,age:[[18,24,36],[25,34,38],[35,44,19],[45,99,7]],cities:[["Delhi",20],["Mumbai",14],["Kolkata",11],["Bengaluru",10],["Chennai",8]],segs:[[0.15,"Power Buyers (5+ orders)","#2563eb"],[0.35,"Repeat Buyers (2–4 orders)","#16a34a"],[0.50,"One-time Buyers","#d97706"]]},
+  "Jewellery & Accessories":{total:180,female:92,age:[[18,24,20],[25,34,38],[35,44,30],[45,99,12]],cities:[["Jaipur",22],["Mumbai",16],["Delhi",14],["Surat",11],["Bengaluru",8]],segs:[[0.18,"Power Buyers (5+ orders)","#2563eb"],[0.32,"Repeat Buyers (2–4 orders)","#16a34a"],[0.50,"One-time Buyers","#d97706"]]},
+  "Footwear":{total:130,female:63,age:[[18,24,32],[25,34,40],[35,44,20],[45,99,8]],cities:[["Mumbai",17],["Delhi",16],["Bengaluru",13],["Agra",12],["Chennai",9]],segs:[[0.12,"Power Buyers (5+ orders)","#2563eb"],[0.33,"Repeat Buyers (2–4 orders)","#16a34a"],[0.55,"One-time Buyers","#d97706"]]},
+  "Home & Kitchen":{total:110,female:72,age:[[18,24,14],[25,34,36],[35,44,34],[45,99,16]],cities:[["Mumbai",15],["Delhi",14],["Bengaluru",12],["Pune",10],["Ahmedabad",9]],segs:[[0.14,"Power Buyers (5+ orders)","#2563eb"],[0.34,"Repeat Buyers (2–4 orders)","#16a34a"],[0.52,"One-time Buyers","#d97706"]]},
+  "Beauty & Personal Care":{total:165,female:82,age:[[18,24,38],[25,34,40],[35,44,16],[45,99,6]],cities:[["Delhi",18],["Mumbai",15],["Bengaluru",13],["Hyderabad",10],["Pune",8]],segs:[[0.20,"Power Buyers (5+ orders)","#2563eb"],[0.38,"Repeat Buyers (2–4 orders)","#16a34a"],[0.42,"One-time Buyers","#d97706"]]},
+  "Utility & Tools":{total:85,female:44,age:[[18,24,26],[25,34,42],[35,44,24],[45,99,8]],cities:[["Bengaluru",18],["Delhi",16],["Mumbai",14],["Pune",12],["Hyderabad",10]],segs:[[0.10,"Power Buyers (5+ orders)","#2563eb"],[0.32,"Repeat Buyers (2–4 orders)","#16a34a"],[0.58,"One-time Buyers","#d97706"]]}
+}
+// ── AUDIENCE DATA ──
+const SUBCATS = {
+  "Women's Fashion":["Kurtis & Kurta Sets","Sarees","Western Wear","Lehengas","Co-ord Sets","Ethnic Dresses","Fusion Wear"],
+  "Men's Fashion":["T-Shirts & Polos","Shirts","Ethnic Wear / Kurta","Jeans & Trousers","Activewear","Innerwear"],
+  "Jewellery & Accessories":["Earrings","Necklaces & Chains","Bangles & Bracelets","Rings","Nose Pins","Anklets","Watches"],
+  "Footwear":["Women's Flats","Women's Heels","Men's Casual","Men's Formal","Ethnic Footwear","Sports Shoes"],
+  "Home & Kitchen":["Bedsheets & Linens","Kitchen Organisers","Decor & Figurines","Storage Solutions","Cushions & Curtains","Cookware"],
+  "Beauty & Personal Care":["Skincare","Haircare","Makeup","Lip Care","Face Wash","Fragrances"],
+  "Utility & Tools":["Phone Accessories","Cable Organisers","Travel Accessories","Stationery","Fitness Tools","Storage"]
+};
+
+const AUD = {
   "Women's Fashion":{total:8.4,female:88,age:[[18,24,28],[25,34,42],[35,44,22],[45,99,8]],cities:[["Mumbai",18],["Delhi",15],["Bengaluru",12],["Pune",9],["Hyderabad",8]],segs:[[1.4,"Power Buyers (5+ orders)","#2563eb"],[3.0,"Repeat Buyers (2–4 orders)","#16a34a"],[4.0,"One-time Buyers","#d97706"]]},
   "Men's Fashion":{total:4.1,female:20,age:[[18,24,36],[25,34,38],[35,44,19],[45,99,7]],cities:[["Delhi",20],["Mumbai",14],["Kolkata",11],["Bengaluru",10],["Chennai",8]],segs:[[0.5,"Power Buyers (5+ orders)","#2563eb"],[1.4,"Repeat Buyers (2–4 orders)","#16a34a"],[2.2,"One-time Buyers","#d97706"]]},
   "Jewellery & Accessories":{total:3.8,female:92,age:[[18,24,20],[25,34,38],[35,44,30],[45,99,12]],cities:[["Jaipur",22],["Mumbai",16],["Delhi",14],["Surat",11],["Bengaluru",8]],segs:[[0.6,"Power Buyers (5+ orders)","#2563eb"],[1.2,"Repeat Buyers (2–4 orders)","#16a34a"],[2.0,"One-time Buyers","#d97706"]]},
@@ -1800,8 +1836,9 @@ function hideAud(){
 }
 
 function fmtL(n){
+  if(n>=100) return Math.round(n)+'L';
   if(n>=10) return n.toFixed(1)+'L';
-  if(n>=1) return n.toFixed(2)+'L';
+  if(n>=1) return n.toFixed(1)+'L';
   return Math.round(n*100)+'K';
 }
 
@@ -1819,8 +1856,8 @@ function loadAudience(){
 
   // Segments
   const maxSeg=d.segs[2][0]*mul;
-  document.getElementById('seg-bars').innerHTML=d.segs.map(([v,name,color])=>{
-    const val=v*mul; const pct=Math.round((val/total)*100);
+  document.getElementById('seg-bars').innerHTML=d.segs.map(([frac,name,color])=>{
+    const val=total*mul*frac; const pct=Math.round(frac*100);
     return `<div class="seg-row">
       <span class="seg-name">${name.split('(')[0].trim()}</span>
       <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:${pct}%;background:${color}"></div></div>
@@ -2205,6 +2242,14 @@ function fetchLogs(){
     }).join('');
   }).catch(function(){alert('Failed to load logs');});
 }
+
+// Wire seller app screen navigation
+document.querySelectorAll('[data-screen]').forEach(function(el){
+  el.addEventListener('click', function(){
+    switchApp(el.dataset.screen);
+    if(el.dataset.feat) setActiveFeat(el);
+  });
+});
 </script>
 </body>
 </html>
