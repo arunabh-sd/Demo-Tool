@@ -417,7 +417,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
 
 /* generated banner full size */
 .gen-banner-full {
-  width: 100%; min-height: 200px;
+  width: 100%; min-height: 260px;
   display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
   padding: 24px; position: relative; overflow: hidden;
 }
@@ -1148,7 +1148,7 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
       <!-- Video Reels — 3 side by side under generator -->
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px">📱 Creator Reels — ShopDeck Hub</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div id="video-reel-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
             <div style="padding-top:177.78%"></div>
             <iframe src="https://drive.google.com/file/d/1_wIFnkN2uhGwUcroTR8IDN3ghVdQS_09/preview?autoplay=1"
@@ -1742,6 +1742,15 @@ function switchTab(i){
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
   document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active',i===j));
   if(i===1) setTimeout(drawIndiaRTODots,80);
+  if(i===2){
+    // Reload video iframes — tab click counts as user interaction, unlocking autoplay
+    setTimeout(function(){
+      var frames=document.querySelectorAll('#video-reel-grid iframe');
+      frames.forEach(function(f,idx){
+        setTimeout(function(){var s=f.src;f.src='';requestAnimationFrame(function(){f.src=s;});},idx*150);
+      });
+    },80);
+  }
   var tabNames=['Audience Intelligence','RTO Shield','AI Creatives','Seller App','Profit Calculator','Logs'];
   logEvent('tab_switch','nav',tabNames[i]||String(i));
 }
@@ -1899,6 +1908,15 @@ const GEN_COPY = JSON.parse(`{
   }
 }`);
 
+const STOCK_QUERIES={
+  'womens-fashion':'indian+woman+fashion+saree+kurti',
+  'jewellery':'gold+jewellery+necklace+indian+woman',
+  'beauty':'skincare+beauty+face+glow+cosmetics',
+  'home-kitchen':'home+decor+interior+cozy+india',
+  'footwear':'fashion+shoes+heels+sandals+women',
+  'mens-fashion':'indian+men+fashion+ethnic+kurta'
+};
+
 async function generateCreative(){
   const cat=document.getElementById('gen-cat').value;
   const theme=document.getElementById('gen-theme').value;
@@ -1927,13 +1945,13 @@ async function generateCreative(){
     copy={tag:fallback.tag,headline:fallback.h,subline:fallback.s,cta:fallback.cta};
   }
 
-  const bgData=(GEN_COPY[cat]||GEN_COPY['jewellery'])[theme];
-  const bg=bgData?bgData.bg:'linear-gradient(145deg,#1a1a2e,#0d0d1f)';
+  const stockQuery=STOCK_QUERIES[cat]||'indian+fashion+lifestyle';
+  const imgUrl='https://source.unsplash.com/featured/900x400?'+stockQuery+'&sig='+Date.now();
 
   spinner.style.display='none';
   result.className='gen-result-area done';
   const banner=document.getElementById('gen-banner-bg');
-  banner.style.background=bg;
+  banner.style.background='linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.5) 55%,rgba(0,0,0,0.25) 100%), url(\''+imgUrl+'\') center/cover no-repeat #0d0d1f';
   document.getElementById('gen-out-tag').textContent=copy.tag||'';
   document.getElementById('gen-out-headline').textContent=copy.headline||'';
   document.getElementById('gen-out-sub').textContent=copy.subline||copy.sub||'';
