@@ -1125,8 +1125,9 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
           <div class="gen-loading-txt">Generating your creative with AI...</div>
         </div>
         <div id="gen-output" style="display:none;width:100%">
-          <div class="gen-banner-full" id="gen-banner-bg">
-            <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%)"></div>
+          <div class="gen-banner-full" id="gen-banner-bg" style="background:#0d0d1f">
+            <img id="gen-banner-img" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.5) 55%,rgba(0,0,0,0.2) 100%)"></div>
             <div style="position:relative;z-index:1">
               <div class="gen-tag" id="gen-out-tag"></div>
               <div class="gen-headline" id="gen-out-headline"></div>
@@ -1909,12 +1910,12 @@ const GEN_COPY = JSON.parse(`{
 }`);
 
 const STOCK_QUERIES={
-  'womens-fashion':'indian+woman+fashion+saree+kurti',
-  'jewellery':'gold+jewellery+necklace+indian+woman',
-  'beauty':'skincare+beauty+face+glow+cosmetics',
-  'home-kitchen':'home+decor+interior+cozy+india',
-  'footwear':'fashion+shoes+heels+sandals+women',
-  'mens-fashion':'indian+men+fashion+ethnic+kurta'
+  'womens-fashion':'fashion,woman,traditional,india',
+  'jewellery':'jewellery,gold,necklace,woman',
+  'beauty':'skincare,beauty,cosmetics,woman',
+  'home-kitchen':'home,decor,interior,kitchen',
+  'footwear':'shoes,fashion,footwear,heels',
+  'mens-fashion':'fashion,man,ethnic,india'
 };
 
 async function generateCreative(){
@@ -1945,13 +1946,18 @@ async function generateCreative(){
     copy={tag:fallback.tag,headline:fallback.h,subline:fallback.s,cta:fallback.cta};
   }
 
-  const stockQuery=STOCK_QUERIES[cat]||'indian+fashion+lifestyle';
-  const imgUrl='https://source.unsplash.com/featured/900x400?'+stockQuery+'&sig='+Date.now();
+  const stockQuery=STOCK_QUERIES[cat]||'fashion,india,lifestyle';
+  const imgUrl='https://loremflickr.com/900/400/'+stockQuery+'?random='+Date.now();
 
   spinner.style.display='none';
   result.className='gen-result-area done';
   const banner=document.getElementById('gen-banner-bg');
-  banner.style.background='linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.5) 55%,rgba(0,0,0,0.25) 100%), url(\''+imgUrl+'\') center/cover no-repeat #0d0d1f';
+  banner.style.background='#0d0d1f';
+  const bannerImg=document.getElementById('gen-banner-img');
+  bannerImg.style.opacity='0';
+  bannerImg.onload=function(){bannerImg.style.opacity='1';};
+  bannerImg.onerror=function(){bannerImg.style.opacity='0';};
+  bannerImg.src=imgUrl;
   document.getElementById('gen-out-tag').textContent=copy.tag||'';
   document.getElementById('gen-out-headline').textContent=copy.headline||'';
   document.getElementById('gen-out-sub').textContent=copy.subline||copy.sub||'';
