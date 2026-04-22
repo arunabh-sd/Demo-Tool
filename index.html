@@ -2316,41 +2316,61 @@ function generatePincodeDots() {
 var currentUser = null;
 var TABS_COUNT = 6;  // 0-5
 
+function decodeJWT(token) {
+  try {
+    var base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    var pad = base64.length % 4;
+    if (pad) base64 += '===='.slice(pad);
+    return JSON.parse(atob(base64));
+  } catch(e) { return null; }
+}
+
 function onGoogleSignIn(response) {
+  var payload = decodeJWT(response.credential);
+  if (!payload || !payload.email) {
+    document.getElementById('auth-error').textContent = 'Could not read account info. Please try again.';
+    document.getElementById('auth-error').style.display = 'block';
+    return;
+  }
+
+  var email = payload.email;
+  var name = payload.name || email.split('@')[0];
+  var domain = email.split('@')[1];
+  var ALLOWED = ['blitzscale.co', 'shopdeck.com'];
+  var ADMINS = ['arunabh.mishra@blitzscale.co'];
+
+  if (ALLOWED.indexOf(domain) === -1) {
+    document.getElementById('auth-error').textContent = 'Access denied. Only blitzscale.co and shopdeck.com accounts are permitted.';
+    document.getElementById('auth-error').style.display = 'block';
+    return;
+  }
+
+  // Access granted
+  currentUser = {email: email, name: name, isAdmin: ADMINS.indexOf(email) !== -1};
+  document.getElementById('auth-overlay').style.display = 'none';
+
+  // Show user chip in topbar
+  var topR = document.querySelector('.topbar-right');
+  var chip = document.createElement('div');
+  chip.className = 'seller-chip';
+  chip.innerHTML = '<div class="seller-dot"></div><span>' + name + '</span>';
+  topR.insertBefore(chip, topR.firstChild);
+
+  // Show logs tab if admin
+  if (currentUser.isAdmin) document.getElementById('logs-tab').style.display = 'flex';
+
+  // Wire logs button
+  var fetchBtn = document.getElementById('log-fetch-btn');
+  if (fetchBtn) fetchBtn.addEventListener('click', fetchLogs);
+
+  // Log to server (fire-and-forget, non-blocking)
   fetch('/api/auth', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({idToken: response.credential})
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if (data.ok) {
-      currentUser = {email: data.email, name: data.name, isAdmin: data.isAdmin};
-      document.getElementById('auth-overlay').style.display = 'none';
-      // Show topbar user info
-      var topR = document.querySelector('.topbar-right');
-      var chip = document.createElement('div');
-      chip.className = 'seller-chip';
-      chip.innerHTML = '<div class="seller-dot"></div><span>' + data.name + '</span>';
-      topR.insertBefore(chip, topR.firstChild);
-      // Show logs tab if admin
-      if (data.isAdmin) document.getElementById('logs-tab').style.display = 'flex';
-      // Wire logs button
-      var fetchBtn = document.getElementById('log-fetch-btn');
-      if (fetchBtn) fetchBtn.addEventListener('click', fetchLogs);
-      var logType = document.getElementById('log-type-sel');
-      // Log login event
-      logEvent('session_start', 'app', '');
-    } else {
-      var errEl = document.getElementById('auth-error');
-      errEl.textContent = data.error || 'Access denied';
-      errEl.style.display = 'block';
-    }
-  })
-  .catch(function(){ 
-    document.getElementById('auth-error').textContent = 'Network error. Please try again.';
-    document.getElementById('auth-error').style.display = 'block';
-  });
+  }).catch(function(){});
+
+  logEvent('session_start', 'app', '');
 }
 
 function logEvent(action, tab, detail) {
