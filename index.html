@@ -1152,21 +1152,21 @@ select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgb
         <div id="video-reel-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
             <div style="padding-top:177.78%"></div>
-            <iframe src="https://drive.google.com/file/d/1_wIFnkN2uhGwUcroTR8IDN3ghVdQS_09/preview?autoplay=1"
+            <iframe src="https://drive.google.com/file/d/1_wIFnkN2uhGwUcroTR8IDN3ghVdQS_09/preview"
               style="position:absolute;top:0;left:0;width:100%;height:calc(100% + 60px);border:none"
-              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              allow="encrypted-media" allowfullscreen></iframe>
           </div>
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
             <div style="padding-top:177.78%"></div>
-            <iframe src="https://drive.google.com/file/d/14m22M5HtXoN6J0hshMmj_ZLNy8HnjOEF/preview?autoplay=1"
+            <iframe src="https://drive.google.com/file/d/14m22M5HtXoN6J0hshMmj_ZLNy8HnjOEF/preview"
               style="position:absolute;top:0;left:0;width:100%;height:calc(100% + 60px);border:none"
-              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              allow="encrypted-media" allowfullscreen></iframe>
           </div>
           <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000">
             <div style="padding-top:177.78%"></div>
-            <iframe src="https://drive.google.com/file/d/1bv0d8x5LTsV5cVCTckGkRAYtEtrJQG6_/preview?autoplay=1"
+            <iframe src="https://drive.google.com/file/d/1bv0d8x5LTsV5cVCTckGkRAYtEtrJQG6_/preview"
               style="position:absolute;top:0;left:0;width:100%;height:calc(100% + 60px);border:none"
-              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              allow="encrypted-media" allowfullscreen></iframe>
           </div>
         </div>
         <div style="font-size:11px;color:var(--text3);margin-top:6px">Share Drive files as "Anyone with the link" for videos to load</div>
@@ -1743,16 +1743,7 @@ function switchTab(i){
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
   document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active',i===j));
   if(i===1) setTimeout(drawIndiaRTODots,80);
-  if(i===2 && !switchTab._videosLoaded){
-    switchTab._videosLoaded=true;
-    // Reload iframes once on first visit — tab click = user gesture, unlocks autoplay
-    setTimeout(function(){
-      var frames=document.querySelectorAll('#video-reel-grid iframe');
-      frames.forEach(function(f,idx){
-        setTimeout(function(){var s=f.src;f.src='';requestAnimationFrame(function(){f.src=s;});},idx*200);
-      });
-    },150);
-  }
+
   var tabNames=['Audience Intelligence','RTO Shield','AI Creatives','Seller App','Profit Calculator','Logs'];
   logEvent('tab_switch','nav',tabNames[i]||String(i));
 }
@@ -1910,13 +1901,49 @@ const GEN_COPY = JSON.parse(`{
   }
 }`);
 
-const STOCK_QUERIES={
-  'womens-fashion':'fashion,woman,traditional,india',
-  'jewellery':'jewellery,gold,necklace,woman',
-  'beauty':'skincare,beauty,cosmetics,woman',
-  'home-kitchen':'home,decor,interior,kitchen',
-  'footwear':'shoes,fashion,footwear,heels',
-  'mens-fashion':'fashion,man,ethnic,india'
+const BANNER_IMAGES={
+  'womens-fashion':{
+    'festive':'https://loremflickr.com/900/400/indian,fashion,woman,festive?lock=101',
+    'minimal':'https://loremflickr.com/900/400/fashion,woman,minimal,clean?lock=102',
+    'bold':'https://loremflickr.com/900/400/fashion,woman,bold,colorful?lock=103',
+    'ethnic':'https://loremflickr.com/900/400/indian,woman,ethnic,saree?lock=104',
+    'premium':'https://loremflickr.com/900/400/fashion,woman,luxury,elegant?lock=105'
+  },
+  'jewellery':{
+    'festive':'https://loremflickr.com/900/400/jewelry,gold,necklace,festive?lock=201',
+    'minimal':'https://loremflickr.com/900/400/jewelry,minimal,silver,delicate?lock=202',
+    'bold':'https://loremflickr.com/900/400/jewelry,bold,statement,chunky?lock=203',
+    'ethnic':'https://loremflickr.com/900/400/jewelry,ethnic,traditional,gold?lock=204',
+    'premium':'https://loremflickr.com/900/400/jewelry,diamond,luxury,premium?lock=205'
+  },
+  'beauty':{
+    'festive':'https://loremflickr.com/900/400/beauty,makeup,festive,glam?lock=301',
+    'minimal':'https://loremflickr.com/900/400/beauty,skincare,minimal,clean?lock=302',
+    'bold':'https://loremflickr.com/900/400/beauty,makeup,bold,colorful?lock=303',
+    'ethnic':'https://loremflickr.com/900/400/beauty,makeup,indian,traditional?lock=304',
+    'premium':'https://loremflickr.com/900/400/beauty,luxury,skincare,premium?lock=305'
+  },
+  'home-kitchen':{
+    'festive':'https://loremflickr.com/900/400/home,decor,festive,lights?lock=401',
+    'minimal':'https://loremflickr.com/900/400/home,minimal,clean,interior?lock=402',
+    'bold':'https://loremflickr.com/900/400/home,decor,bold,colorful?lock=403',
+    'ethnic':'https://loremflickr.com/900/400/home,decor,indian,traditional?lock=404',
+    'premium':'https://loremflickr.com/900/400/home,luxury,interior,premium?lock=405'
+  },
+  'footwear':{
+    'festive':'https://loremflickr.com/900/400/shoes,heels,women,festive?lock=501',
+    'minimal':'https://loremflickr.com/900/400/shoes,minimal,white,clean?lock=502',
+    'bold':'https://loremflickr.com/900/400/shoes,bold,colorful,statement?lock=503',
+    'ethnic':'https://loremflickr.com/900/400/shoes,ethnic,indian,traditional?lock=504',
+    'premium':'https://loremflickr.com/900/400/shoes,luxury,premium,leather?lock=505'
+  },
+  'mens-fashion':{
+    'festive':'https://loremflickr.com/900/400/men,fashion,festive,indian?lock=601',
+    'minimal':'https://loremflickr.com/900/400/men,fashion,minimal,white?lock=602',
+    'bold':'https://loremflickr.com/900/400/men,fashion,bold,colorful?lock=603',
+    'ethnic':'https://loremflickr.com/900/400/men,fashion,ethnic,kurta?lock=604',
+    'premium':'https://loremflickr.com/900/400/men,fashion,luxury,premium?lock=605'
+  }
 };
 
 async function generateCreative(){
@@ -1947,8 +1974,7 @@ async function generateCreative(){
     copy={tag:fallback.tag,headline:fallback.h,subline:fallback.s,cta:fallback.cta};
   }
 
-  const stockQuery=STOCK_QUERIES[cat]||'fashion,india,lifestyle';
-  const imgUrl='https://loremflickr.com/900/400/'+stockQuery+'?random='+Date.now();
+  const imgUrl=(BANNER_IMAGES[cat]&&BANNER_IMAGES[cat][theme])||'https://loremflickr.com/900/400/fashion,india,lifestyle?lock=999';
 
   spinner.style.display='none';
   result.className='gen-result-area done';
