@@ -7,6 +7,7 @@ const crypto = require("crypto");
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "943701391495-qae2ifdl3hqrni4s6kgqe6c1j19qc914.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
 const BASE_URL = process.env.BASE_URL || "";
@@ -15,6 +16,19 @@ const SESSIONS_FILE = path.join(__dirname, "sessions.json");
 const ALLOWED_DOMAINS = ["blitzscale.co", "shopdeck.com"];
 const ADMIN_EMAILS = ["arunabh.mishra@blitzscale.co"];
 const LOGS_EMAILS = ["arunabh.mishra@blitzscale.co","krishna.agrawal@blitzscale.co","maruti.pandey@blitzscale.co"];
+
+const THEME_STYLE_GUIDES = {
+  festive: "Use a warm festive palette — deep saffron, marigold, magenta, and gold. Include diya, marigold garland, or firework motifs in the background. Typography should feel celebratory. Warm glowing light feel. Suits Diwali, Navratri, Eid, Holi, and wedding season campaigns.",
+  minimal: "Use a soft airy palette — pastels, off-whites, blush pinks, or light sage. Minimal decorative elements; let the product models carry the visual. Clean modern typography. Ample white space. Premium yet approachable.",
+  bold: "Use high-contrast energetic colors — bright red, electric blue, or bold yellow with contrasting outlines. Large confident typography. Geometric or diagonal layout elements. Fast-moving and sale-driven, suited to flash sales or new collection drops.",
+  ethnic: "Use a rich heritage palette — deep burgundy, royal blue, forest green, or earthy terracotta. Traditional Indian motifs — paisleys, floral jaal, mandala outlines, or block-print textures. Typography blending classic serif with regional script flavors. Evokes Indian craft traditions.",
+  premium: "Use a restrained opulent palette — ivory, champagne, charcoal, or deep teal with gold accents. Thin serif or elegant script typography. Minimal text, generous spacing. Subtle brocade or jacquard weave background texture. Editorial and aspirational — suited for bridal or designer wear."
+};
+const CATEGORY_LABELS = {
+  "womens-fashion": "Women's Fashion", "jewellery": "Jewellery",
+  "beauty": "Beauty & Skincare", "home-kitchen": "Home & Kitchen",
+  "footwear": "Footwear", "mens-fashion": "Men's Fashion"
+};
 
 function getBaseUrl(req) {
   if (BASE_URL) return BASE_URL;
@@ -81,6 +95,15 @@ function httpsPost(hostname, p, body) {
     const payload = new url.URLSearchParams(body).toString();
     const req = https.request({hostname, path:p, method:"POST",
       headers:{"Content-Type":"application/x-www-form-urlencoded","Content-Length":Buffer.byteLength(payload)}
+    }, r => { let d=""; r.on("data",c=>d+=c); r.on("end",()=>resolve(d)); });
+    req.on("error",reject); req.write(payload); req.end();
+  });
+}
+function httpsPostJSON(hostname, p, body) {
+  return new Promise((resolve,reject) => {
+    const payload = JSON.stringify(body);
+    const req = https.request({hostname, path:p, method:"POST",
+      headers:{"Content-Type":"application/json","Content-Length":Buffer.byteLength(payload)}
     }, r => { let d=""; r.on("data",c=>d+=c); r.on("end",()=>resolve(d)); });
     req.on("error",reject); req.write(payload); req.end();
   });
@@ -168,6 +191,62 @@ async function handleGetLogs(req, res) {
   send(res,200,{total:entries.length,byEmail,entries:entries.slice(-500)});
 }
 
+async function handleGenerateBanner(req, res) {
+  const s = getSession(req);
+  if (!s) return send(res, 401, {error:"Not authenticated"});
+  const body = await readBody(req);
+  let cat="", theme="", brandName="";
+  try { const p=JSON.parse(body); cat=p.category||""; theme=p.theme||""; brandName=p.brandName||""; } catch(e) {}
+  if (!cat||!theme) return send(res, 400, {error:"Missing category or theme"});
+  if (!GEMINI_API_KEY) return send(res, 500, {error:"Gemini API key not configured"});
+
+  const catLabel = CATEGORY_LABELS[cat] || cat;
+  const themeLabel = {festive:"Festive & Celebratory",minimal:"Clean & Minimal",bold:"Bold & Dynamic",ethnic:"Ethnic & Heritage",premium:"Luxury & Premium"}[theme] || theme;
+  const themeGuide = THEME_STYLE_GUIDES[theme] || "";
+  const brand = brandName || "a premium Indian D2C brand";
+
+  const prompt = `Create a wide-format promotional website banner (1400x500 px, 16:5 aspect ratio) for an Indian ethnic fashion brand called "${brand}".
+
+PRODUCT: The banner promotes ${catLabel} targeted at Indian women shoppers.
+
+MODELS & LAYOUT: Feature Indian women models wearing a product of the ${catLabel}. The models should be cropped at mid-thigh or full-length. The center of the banner is reserved for text and CTA elements.
+
+THEME: ${themeLabel}
+
+THEME STYLE GUIDE:
+${themeGuide}
+
+TEXT HIERARCHY (center panel):
+1. Small script/italic text at top: "beautiful"
+2. Large headline: "${catLabel}" in bold display type
+
+BACKGROUND: Use a decorative ethnic-motif wallpaper (mandalas, paisleys, or floral jaal) at low opacity (10-15%) behind the central text panel. Background should feel light, not overpower the models.
+
+STYLE RULES:
+- Professionally designed for an Indian e-commerce website (similar to Myntra, Nykaa Fashion, or Utsav Fashion hero banners)
+- No watermarks, no extra UI chrome
+- All text clearly legible, sized for desktop viewing
+- Balanced composition with equal visual weight on both sides`;
+
+  try {
+    const apiPath = `/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${GEMINI_API_KEY}`;
+    const result = JSON.parse(await httpsPostJSON("generativelanguage.googleapis.com", apiPath, {
+      contents: [{parts:[{text:prompt}]}],
+      generationConfig: {responseModalities:["IMAGE","TEXT"]}
+    }));
+    const parts = ((result.candidates||[])[0]?.content?.parts)||[];
+    const imgPart = parts.find(p=>p.inlineData&&p.inlineData.data);
+    if (!imgPart) {
+      console.error("Gemini banner response:", JSON.stringify(result).slice(0,500));
+      return send(res, 502, {error:"No image returned from Gemini API"});
+    }
+    send(res, 200, {imageData:imgPart.inlineData.data, mimeType:imgPart.inlineData.mimeType||"image/jpeg"});
+  } catch(e) {
+    console.error("Gemini banner error:", e.message);
+    send(res, 500, {error:e.message});
+  }
+}
+
 async function handleGenerate(req, res) {
   const s = getSession(req);
   if (!s) return send(res,401,{error:"Not authenticated"});
@@ -221,6 +300,7 @@ http.createServer(async (req,res)=>{
     if(req.method==="POST"&&pathname==="/api/log") return await handleLog(req,res);
     if(req.method==="GET"&&pathname==="/api/logs") return await handleGetLogs(req,res);
     if(req.method==="POST"&&pathname==="/api/generate") return await handleGenerate(req,res);
+    if(req.method==="POST"&&pathname==="/api/generate-banner") return await handleGenerateBanner(req,res);
     serveStatic(req,res);
   }catch(e){
     console.error("Error:",e.message);

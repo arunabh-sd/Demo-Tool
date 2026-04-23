@@ -1974,7 +1974,11 @@ async function generateCreative(){
     copy={tag:fallback.tag,headline:fallback.h,subline:fallback.s,cta:fallback.cta};
   }
 
-  const imgUrl=(BANNER_IMAGES[cat]&&BANNER_IMAGES[cat][theme])||'https://loremflickr.com/900/400/fashion,india,lifestyle?lock=999';
+  let imgUrl=(BANNER_IMAGES[cat]&&BANNER_IMAGES[cat][theme])||'https://loremflickr.com/900/400/fashion,india,lifestyle?lock=999';
+  try {
+    const imgRes=await fetch('/api/generate-banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:cat,theme,brandName:tagline})});
+    if(imgRes.ok){const imgData=await imgRes.json();if(imgData.imageData){imgUrl='data:'+(imgData.mimeType||'image/jpeg')+';base64,'+imgData.imageData;}}
+  } catch(e){ /* fall back to static BANNER_IMAGES url */ }
 
   spinner.style.display='none';
   result.className='gen-result-area done';
