@@ -15,7 +15,7 @@ const LOGS_FILE = path.join(__dirname, "logs.json");
 const SESSIONS_FILE = path.join(__dirname, "sessions.json");
 const ALLOWED_DOMAINS = ["blitzscale.co", "shopdeck.com"];
 const ADMIN_EMAILS = ["arunabh.mishra@blitzscale.co"];
-const LOGS_EMAILS = ["arunabh.mishra@blitzscale.co","krishna.agrawal@blitzscale.co","maruti.pandey@blitzscale.co"];
+const LOGS_EMAILS = ["arunabh.mishra@blitzscale.co","krishna.agrawal@blitzscale.co","maruti.pandey@blitzscale.co","prashant.yadav@blitzscale.co"];
 
 const THEME_STYLE_GUIDES = {
   festive: "Use a warm festive palette — deep saffron, marigold, magenta, and gold. Include diya, marigold garland, or firework motifs in the background. Typography should feel celebratory. Warm glowing light feel. Suits Diwali, Navratri, Eid, Holi, and wedding season campaigns.",
